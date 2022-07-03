@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id 'com.github.node-gradle.node' version '3.4.0'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+node {
+    version = '16.15.1'
+    npmVersion = '8.13.2'
+    download = true
+}
+
+jar.dependsOn 'npm_run_build'
+
+jar {
+    from 'dist/shopbill-ui' into 'static'
+}

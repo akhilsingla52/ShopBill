@@ -1,0 +1,53 @@
+buildscript {
+	ext {
+		springBootVersion = '2.7.1'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.7.1'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.shop.bill'
+version = '1.0'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation(project(':shopbill-ui'))
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-jersey'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	// implementation 'org.springframework.boot:spring-boot-starter-mail'
+	// implementation 'org.springframework.boot:spring-boot-starter-security'
+	
+	compileOnly 'org.projectlombok:lombok:1.18.+'
+	// implementation 'io.jsonwebtoken:jjwt:0.9.+'
+	// implementation 'org.apache.commons:commons-lang3:3.7'
+	// implementation 'commons-codec:commons-codec:1.+'
+	
+	// implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	// runtimeOnly 'org.postgresql:postgresql'
+	// runtimeOnly 'mysql:mysql-connector-java'
+	
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'com.h2database:h2'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

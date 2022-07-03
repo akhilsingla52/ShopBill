@@ -1,0 +1,92 @@
+html, body {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+a {
+    text-decoration: none !important;
+    outline: 0;
+}
+
+.btn[disabled] {
+    cursor: not-allowed;
+}
+
+ol {
+    list-style-position: inside;
+}
+
+.app-body {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: whitesmoke;
+}
+
+.admin-body {
+    margin: 5rem 0rem 6rem 0rem;
+}
+
+.table-condensed {
+    box-shadow: 10px 10px 12px;
+    -moz-box-shadow: 10px 10px 12px;
+    -webkit-box-shadow: 10px 10px 12px;
+}
+
+.modal-dialog {
+    box-shadow: 10px 10px 12px;
+    -moz-box-shadow: 10px 10px 12px;
+    -webkit-box-shadow: 10px 10px 12px;
+}
+
+.alert {
+    margin-bottom: 50px;
+    box-shadow: 10px 10px 12px;
+    -moz-box-shadow: 10px 10px 12px;
+    -webkit-box-shadow: 10px 10px 12px;
+}
+
+.addButton {
+    cursor: pointer;
+    position: fixed;
+    background: #007bff;
+    padding: 14px 18px;
+    border-radius: 50%;
+    z-index: 1000;
+    bottom: 0;
+    right: 0;
+    margin: 0% 1% 1% 0%;
+    box-shadow: 10px 10px 12px;
+    -moz-box-shadow: 10px 10px 12px;
+    -webkit-box-shadow: 10px 10px 12px;
+}
+
+@media (min-width: 992px) {
+    .dropdown-menu-right {
+        right: 0;
+        left: auto;
+    }
+}
+.description-text {
+    width:12.5rem;
+}
+
+.question-options {
+    padding: 0;
+}
+
+.form-control-feedback {
+    position: absolute;
+    z-index: 10;
+    color: gray;
+    padding: 0.7rem 0.4rem;
+}
+
+.form-control-search {
+    padding-left: 1.8rem;
+    border-radius: .25rem !important;
+}
