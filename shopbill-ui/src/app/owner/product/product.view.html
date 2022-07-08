@@ -1,0 +1,162 @@
+<div class="addButton" data-bs-toggle="modal" data-bs-target="#addUpdateModel" (click)="openAddModel()">
+    <i class="fa fa-plus fa-2x text-white" aria-hidden="true"></i>
+</div>
+
+<div class="form">
+    <div class="input-group mb-3">
+        <span class="input-group-text" (click)="getProductList()"><i class="fas fa-search"></i></span>
+        <input type="text" class="form-control" placeholder="Search product..." [(ngModel)]="params.search"
+            (keyup.enter)="getProductList()">
+        <span class="input-group-text" (click)="getProductList()">Search</span>
+    </div>
+</div>
+
+<ngb-pagination class="float-end" [(page)]="params.page" [(pageSize)]="params.size"
+    [(collectionSize)]="params.totalElements" [maxSize]="5" [ellipses]="false" [boundaryLinks]="true" size="sm"
+    (pageChange)="getProductList()"></ngb-pagination>
+
+<div class="panel-body">
+    <table class="table table-striped table-condensed table-hover">
+        <thead>
+            <tr>
+                <th *ngFor="let head of headElements; let i = index" (click)="orderBy(head.sort)">
+                    {{ head.element }}
+                    <em class='fas' *ngIf="params.sort === head.sort || params.sort === (head.sort+',desc')"
+                        [ngClass]="params.sort===head.sort ? 'fa-caret-up' : 'fa-caret-down'"></em>
+                </th>
+                <th class="text-center">
+                    <em class="fa fa-cog"></em>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngIf="products.length == 0">
+                <td colspan="8">No Product to Display</td>
+            </tr>
+
+            <tr *ngFor="let product of products; let i = index">
+                <td>{{product.code}}</td>
+                <td>{{product.name}}</td>
+                <td>{{product.hsnCode}}</td>
+                <td>{{product.unit}}</td>
+                <td>{{product.unitType.messageEn}}</td>
+                <td>{{product.price}}</td>
+                <td>{{product.crtId}}</td>
+                <td>{{product.crtDtm | date:'dd-MMM-yyyy'}}</td>
+                <td class="text-center p-0" *ngIf="product.delYn === 'N'">
+                    <a class='me-2 btn text-primary edit-button' data-toggle="modal" data-target="#addUpdateModel"
+                        (click)="openUpdateModel(product)">
+                        <em class='far fa-edit'></em>
+                    </a>
+                    <a class='btn text-danger delete-button' (click)="deleteProductById(product, i)">
+                        <em class='far fa-trash-alt'></em>
+                    </a>
+                </td>
+                <td class="text-center p-0" *ngIf="product.delYn === 'Y'">
+                    <a class='btn text-success edit-button' (click)="activateProduct(product)">
+                        <em class='fa fa-check'></em>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Create Update Modal -->
+<div class="modal fade" id="addUpdateModel" role="dialog" 
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header alert-info">
+                <h1 class="mx-auto">{{model_header}} Product</h1>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="form" (ngSubmit)="createUpdateProduct()" novalidate>
+                    <input type="hidden" name="id" formControlName="id">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="code">Product Code<i class="far fa-asterisk text-danger"
+                                    aria-hidden="true"></i></label>
+                            <input class="form-control" type="text" formControlName="code"
+                                placeholder="Enter product Name" required [ngClass]="{
+                                        'is-valid': f.code.valid && (f.code.dirty || f.code.touched),
+                                        'is-invalid': f.code.invalid && (f.code.dirty || f.code.touched)
+                                    }">
+                            <div class="text-danger" *ngIf="f.code.invalid && (f.code.dirty || f.code.touched)">
+                                <p>Please enter product code</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="name">Product Name<i class="far fa-asterisk text-danger"
+                                    aria-hidden="true"></i></label>
+                            <input class="form-control" type="text" formControlName="name"
+                                placeholder="Enter product Name" required [ngClass]="{
+                                        'is-valid': f.name.valid && (f.name.dirty || f.name.touched),
+                                        'is-invalid': f.name.invalid && (f.name.dirty || f.name.touched)
+                                    }">
+                            <div class="text-danger" *ngIf="f.name.invalid && (f.name.dirty || f.name.touched)">
+                                <p>Please enter product name</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="hsnCode">HSN Code</label>
+                            <input class="form-control" type="text" formControlName="hsnCode"
+                                placeholder="Enter hsn code">
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="name">Price<i class="far fa-asterisk text-danger"
+                                    aria-hidden="true"></i></label>
+                            <input class="form-control" type="number" formControlName="price" placeholder="Enter price"
+                                required [ngClass]="{
+                                    'is-valid': f.price.valid && (f.price.dirty || f.price.touched),
+                                    'is-invalid': f.price.invalid && (f.price.dirty || f.price.touched)
+                                }">
+                            <div class="text-danger" *ngIf="f.price.invalid && (f.price.dirty || f.price.touched)">
+                                <p>Please enter price</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="name">Unit<i class="far fa-asterisk text-danger" aria-hidden="true"></i></label>
+                            <input class="form-control" type="number" formControlName="unit" placeholder="Enter unit"
+                                required [ngClass]="{
+                                    'is-valid': f.unit.valid && (f.unit.dirty || f.unit.touched),
+                                    'is-invalid': f.unit.invalid && (f.unit.dirty || f.unit.touched)
+                                }">
+                            <div class="text-danger" *ngIf="f.unit.invalid && (f.unit.dirty || f.unit.touched)">
+                                <p>Please enter unit</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3" formGroupName="unitType">
+                            <label for="name">Unit Type<i class="far fa-asterisk text-danger"
+                                    aria-hidden="true"></i></label>
+                            <select name="codeKey" class="form-control" formControlName="codeKey" [ngClass]="{
+                                'is-valid': getControls('unitType.codeKey').valid && (getControls('unitType.codeKey').dirty || getControls('unitType.codeKey').touched),
+                                'is-invalid': getControls('unitType.codeKey').invalid && (getControls('unitType.codeKey').dirty || getControls('unitType.codeKey').touched)
+                            }">
+                                <option disabled>Select Unit Type</option>
+                                <option *ngFor="let ut of unitTypes" [value]="ut.codeKey">{{ut.messageEn}}</option>
+                            </select>
+
+                            <div class="text-danger"
+                                *ngIf="getControls('unitType.codeKey').invalid && (getControls('unitType.codeKey').dirty || getControls('unitType.codeKey').touched)">
+                                <p>Please select unit type</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <button type="submit" class="me-2 btn btn-success"
+                            [disabled]="!form.valid">{{model_header}}</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

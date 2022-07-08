@@ -31,6 +31,14 @@ ol {
     margin: 5rem 0rem 6rem 0rem;
 }
 
+.fa {
+    font-size: 1.5rem;
+}
+
+.table {
+    vertical-align: middle !important;
+}
+
 .table-condensed {
     box-shadow: 10px 10px 12px;
     -moz-box-shadow: 10px 10px 12px;
@@ -71,12 +79,9 @@ ol {
         left: auto;
     }
 }
-.description-text {
-    width:12.5rem;
-}
 
-.question-options {
-    padding: 0;
+.fa-asterisk {
+    vertical-align: super;
 }
 
 .form-control-feedback {

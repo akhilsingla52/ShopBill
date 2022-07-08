@@ -10,7 +10,10 @@
       "prefix": "app",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "css"
+        },
+        "@schematics/angular:application": {
+          "strict": true
         }
       },
       "architect": {
@@ -29,9 +32,12 @@
             ],
             "styles": [
               "node_modules/bootstrap/scss/bootstrap.scss",
-              "node_modules/font-awesome/scss/font-awesome.scss",
+              "node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss",
+              "node_modules/@fortawesome/fontawesome-free/scss/solid.scss",
+              "node_modules/@fortawesome/fontawesome-free/scss/regular.scss",
+              "node_modules/@fortawesome/fontawesome-free/scss/brands.scss",
               "node_modules/sweetalert2/src/sweetalert2.scss",
-              "src/styles.scss"
+              "src/assets/scss/styles.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

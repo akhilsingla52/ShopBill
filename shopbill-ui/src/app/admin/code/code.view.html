@@ -1,0 +1,12 @@
+<div id="test" class="tree" *ngIf="codes.length > 0">
+    <ul *ngFor="let code of codes; let i = index">
+        <li class="parent_li">
+            <span title="{{code.codeKey}}">{{code.messageEn}}</span>
+            <ul *ngFor="let code2 of code.codes;">
+                <li class="parent_li">
+                    <span title="{{code2.codeKey}}">{{code2.messageEn}}</span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

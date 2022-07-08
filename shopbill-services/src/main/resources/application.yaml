@@ -1,2 +1,31 @@
 server:
- port: 8080
+  port: 8080
+  
+spring:
+  main:
+    banner-mode: off
+  jackson:
+    default-property-inclusion: NON_NULL
+  datasource:
+    url: jdbc:postgresql://localhost:5432/shopbill
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      
+logging:
+  level:
+    org:
+      springframework: ERROR
+ 
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  api-docs: 
+    enabled: true
+  packages-to-scan: com.shop.bill
