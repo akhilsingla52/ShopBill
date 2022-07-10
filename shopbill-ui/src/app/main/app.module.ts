@@ -8,11 +8,11 @@ import { AppComponent } from '../appComponent/app.component';
 import { LoginRoutingModule, loginComponents } from '../login/login-routes/login.routing.module';
 import { SharedRoutingModule, sharedComponents } from '../shared/shared-routes/shared.routing.module';
 import { AdminRoutingModule, adminComponents } from '../admin/admin-routes/admin.routing.module';
-import { OwnerRoutingModule, ownerComponents } from '../owner/owner-routes/owner.routing.module';
+import { OtherRoutingModule, otherComponents } from '../other/other-routes/other.routing.module';
 
 @NgModule({
   declarations: [
-    AppComponent, loginComponents, adminComponents, ownerComponents, sharedComponents
+    AppComponent, loginComponents, adminComponents, otherComponents, sharedComponents
   ],
   imports: [
     BrowserModule,
@@ -24,7 +24,7 @@ import { OwnerRoutingModule, ownerComponents } from '../owner/owner-routes/owner
     NgbAlertModule,
     LoginRoutingModule,
     AdminRoutingModule,
-    OwnerRoutingModule,
+    OtherRoutingModule,
     SharedRoutingModule
   ],
   bootstrap: [AppComponent],

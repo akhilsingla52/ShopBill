@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes }  from '@angular/router';
 
-import { OwnerComponent } from '../owner.component';
+import { OtherComponent } from '../other.component';
 import { ProductComponent } from '../product/product.component';
 import { UserComponent } from '../user/user.component';
 
@@ -9,7 +9,7 @@ import { ProductService } from '../product/product.service';
 import { UserService } from '../user/user.service';
 
 const ownerRoutes: Routes = [
-    { path: 'owner', component: OwnerComponent,
+    { path: '', component: OtherComponent,
         children: [
             { path: '', redirectTo: 'user', pathMatch: 'full' },
             { path: 'product',  component: ProductComponent },
@@ -28,10 +28,10 @@ const ownerRoutes: Routes = [
     exports: [ RouterModule ]
 })
 
-export class OwnerRoutingModule { }
+export class OtherRoutingModule { }
 
-export const ownerComponents = [
-    OwnerComponent,
+export const otherComponents = [
+    OtherComponent,
     ProductComponent,
     UserComponent
 ];

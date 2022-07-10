@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'owner',
-    templateUrl: './owner.view.html',
+    selector: 'other',
+    templateUrl: './other.view.html',
 })
 
-export class OwnerComponent implements OnInit {
+export class OtherComponent implements OnInit {
 
     constructor() { }
 
