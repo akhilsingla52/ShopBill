@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ProductService } from './product.service';
+import { UserService } from './user.service';
 import { CodeService } from '../../admin/code/code.service';
 
-import { BaseComponent, Product, CommonCode, UNIT_TYPE } from '../../shared/models/models';
+import { BaseComponent, User, CommonCode, USER_TYPE } from '../../shared/models/models';
 
 @Component({
-    selector: 'product',
-    templateUrl: './product.view.html',
+    selector: 'user',
+    templateUrl: './user.view.html',
 })
-export class ProductComponent extends BaseComponent implements OnInit {
-    products: Product[] = [];
-    unitTypes: CommonCode[] = [];
-    product: Product;
+export class UserComponent extends BaseComponent implements OnInit {
+    users: User[] = [];
+    userTypes: CommonCode[] = [];
+    user: User;
 
     constructor(private router: Router,
-        private productService: ProductService,
+        private userService: UserService,
         private codeService: CodeService) { super(); }
 
     ngOnInit() {
@@ -28,18 +28,27 @@ export class ProductComponent extends BaseComponent implements OnInit {
         }, { 
             element: 'Name', 
             sort:'name'
+        },  {
+            element: 'Type', 
+            sort:'type.messageEn'
         }, {
-            element: 'Stock', 
-            sort:'unitType.messageEn,unit'
+            element: 'Balance', 
+            sort:'balance'
         }];
         this.formValidations();
-        this.getProductList();
+        this.getUserPage();
     }
 
     formValidations() {
         this.form = new FormGroup({
             id: new FormControl(''),
             delYn: new FormControl(''),
+            type: new FormGroup({
+                codeKey: new FormControl('', {
+                    validators: Validators.required,
+                    updateOn: 'change'
+                })
+            }),
             code: new FormControl('', {
                 validators: Validators.required,
                 updateOn: 'change'
@@ -48,51 +57,42 @@ export class ProductComponent extends BaseComponent implements OnInit {
                 validators: Validators.required,
                 updateOn: 'change'
             }),
-            hsnCode: new FormControl('', {
+            balance: new FormControl(0, {
                 validators: Validators.required,
                 updateOn: 'change'
             }),
-            unit: new FormControl(0, {
+            mobile: new FormControl(0, {
                 validators: Validators.required,
                 updateOn: 'change'
             }),
-            unitType: new FormGroup({
-                codeKey: new FormControl('', {
-                    validators: Validators.required,
-                    updateOn: 'change'
-                })
-            }),
-            price: new FormControl(0, {
-                validators: Validators.required,
-                updateOn: 'change'
-            }),
+            phone: new FormControl(0),
+            email: new FormControl(''),
+            address: new FormControl(''),
+            gstin: new FormControl(''),
+            pan: new FormControl(''),
+            state: new FormControl(''),
+            stateCode: new FormControl(''),
+            pinCode: new FormControl(0),
+            remark: new FormControl(''),
         });
     }
 
     orderBy(sort: string) {
         if(this.params.sort.length > 0
             && this.params.sort[0] === sort) {
-            if(this.params.sort[0] === 'unitType.messageEn,unit') {
-                this.params.sort[0] = 'unitType.messageEn,desc';
-                this.params.sort[1] = 'unit,desc';
-            } else {
-                this.params.sort[0] = sort+',desc';
-            }
+            this.params.sort[0] = sort+',desc';
         } else {
-            if(this.params.sort.length>1) {
-                this.params.sort.splice(1,1);
-            }
             this.params.sort[0] = sort;
         }
-        this.getProductList();
+        this.getUserPage();
     }
 
-    getProductList() {
-        this.productService.getProductList(this.params)
+    getUserPage() {
+        this.userService.getUserPage(this.params)
             .then(
                 success => {
                     this.params.totalElements = success.totalElements;
-                    this.products = success.content as Product[];
+                    this.users = success.content as User[];
                 }, error => {
                     this.errorPopUp();
                 }
@@ -101,11 +101,11 @@ export class ProductComponent extends BaseComponent implements OnInit {
         this.form.reset();
     }
 
-    getUnitTypes() {
-        this.codeService.getCodeListByParentCodeKey(UNIT_TYPE)
+    getUserTypes() {
+        this.codeService.getCodeListByParentCodeKey(USER_TYPE)
             .then(
                 success => {
-                    this.unitTypes = success as CommonCode[];
+                    this.userTypes = success as CommonCode[];
                 }, error => {
                     this.errorPopUp();
                 }
@@ -114,48 +114,48 @@ export class ProductComponent extends BaseComponent implements OnInit {
 
     openAddModel() {
         this.openModel("Add");
-        this.getUnitTypes();
+        this.getUserTypes();
     }
 
-    openUpdateModel(product: any) {
+    openUpdateModel(user: any) {
         this.openModel("Update");
-        this.getUnitTypes();
-        this.form.patchValue(product);
+        this.getUserTypes();
+        this.form.patchValue(user);
     }
 
-    createUpdateProduct() {
-        this.productService.createUpdateProduct(this.form.value)
+    createUpdateUser() {
+        this.userService.createUpdateUser(this.form.value)
             .then(
                 success => {
                     this.closeModel("#addUpdateModel");
-                    this.successPopUp("Product Added");
-                    this.getProductList();
+                    this.successPopUp("User Added");
+                    this.getUserPage();
                 }, error => {
                     this.errorPopUp();
                 }
             );
     }
 
-    deleteProductById(product: Product) {
-        this.productService.deleteProductById(product.id)
+    deleteUserById(user: User, index: number) {
+        this.userService.deleteUserById(user.id)
             .then(
                 success => {
-                    product.delYn = 'Y';
-                    this.successPopUp("Product Deleted");
+                    user.delYn = 'Y';
+                    this.successPopUp("User Deleted");
                 }, error => {
                     this.errorPopUp();
                 }
             );
     }
 
-    activateProduct(product: Product) {
-        product.delYn = 'N';
-        this.productService.createUpdateProduct(product)
+    activateUser(user: User) {
+        user.delYn = 'N';
+        this.userService.createUpdateUser(user)
             .then(
                 success => {
-                    this.successPopUp("Product Activated");
+                    this.successPopUp("User Activated");
                 }, error => {
-                    product.delYn = 'Y';
+                    user.delYn = 'Y';
                     this.errorPopUp();
                 }
             );

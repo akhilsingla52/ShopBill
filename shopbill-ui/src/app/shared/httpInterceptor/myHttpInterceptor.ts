@@ -4,18 +4,18 @@ import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent,
 import { Observable, of } from 'rxjs';
 import { tap, catchError } from "rxjs/operators";
 
-import { SweetAlertPopUp } from '../../shared/utils/SweetAlertPopUp';
-import { APP_URI, ADMIN_URI, OWNER_URI, REST_URI } from '../utils/Const';
+import Swal from 'sweetalert2';
+import { APP_URI, REST_URI } from '../utils/Const';
 
 @Injectable()
-export class MyHttpInterceptor extends SweetAlertPopUp implements HttpInterceptor {
+export class MyHttpInterceptor implements HttpInterceptor {
 
-    constructor() { super(); }
+    constructor() { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const authReq = req.clone({ 
             headers: req.headers.set("Authorization", "auth-token"),
-            url: (APP_URI + req.url)
+            url: (APP_URI + REST_URI + req.url)
         });
         this.showLoading();
         return next
@@ -35,19 +35,19 @@ export class MyHttpInterceptor extends SweetAlertPopUp implements HttpIntercepto
                     return of(err);
                 })
             );
-            // .do(
-            //     (succ: HttpEvent<any>) => {
-            //         if(succ instanceof HttpResponse) {
-                        
-            //         }
-            //     },
-            //     (err: any) => {
-            //         if(err instanceof HttpErrorResponse) {
-            //             if(err.status === 401) {
-                            
-            //             }
-            //         }
-            //     }
-            // );
     }
+
+    public showLoading() {
+        Swal.fire({
+            title: 'Loading...',
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        });
+        Swal.showLoading();
+    }
+
+    public close() {
+        Swal.close();
+    }
+
 }

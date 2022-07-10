@@ -1,16 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes }  from '@angular/router';
 
-import { OwnerComponent } from '../owner.component'
-import { ProductComponent } from '../product/product.component'
+import { OwnerComponent } from '../owner.component';
+import { ProductComponent } from '../product/product.component';
+import { UserComponent } from '../user/user.component';
 
-import { ProductService } from '../product/product.service'
+import { ProductService } from '../product/product.service';
+import { UserService } from '../user/user.service';
 
 const ownerRoutes: Routes = [
     { path: 'owner', component: OwnerComponent,
         children: [
-            { path: '', redirectTo: 'product', pathMatch: 'full' },
+            { path: '', redirectTo: 'user', pathMatch: 'full' },
             { path: 'product',  component: ProductComponent },
+            { path: 'user',  component: UserComponent },
         ]
     }
 ];
@@ -19,7 +22,8 @@ const ownerRoutes: Routes = [
 @NgModule({
     imports: [ RouterModule.forRoot(ownerRoutes, {useHash: false}) ],
     providers: [ 
-        ProductService
+        ProductService,
+        UserService
      ],
     exports: [ RouterModule ]
 })
@@ -28,5 +32,6 @@ export class OwnerRoutingModule { }
 
 export const ownerComponents = [
     OwnerComponent,
-    ProductComponent
+    ProductComponent,
+    UserComponent
 ];

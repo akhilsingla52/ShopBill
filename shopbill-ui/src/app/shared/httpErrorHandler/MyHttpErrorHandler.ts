@@ -1,5 +1,4 @@
 import { ErrorHandler, Injectable } from "@angular/core";
-import 'rxjs/add/operator/toPromise';
 
 declare let swal: any;
 

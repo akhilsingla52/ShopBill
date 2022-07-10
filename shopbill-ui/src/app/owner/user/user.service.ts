@@ -2,36 +2,35 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
-import { Product } from '../../shared/models/Product'
+import { User } from '../../shared/models/User'
 
 @Injectable()
-export class ProductService {
+export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getProductList(paramValues: any) {
+  getUserPage(paramValues: any) {
     let params = new HttpParams();
     params = params.append('page', paramValues.page-1);
     params = params.append('size', paramValues.size);
     if(paramValues.sort.length >0) {
-      for (let i = 0; i < paramValues.sort.length; ++i) { 
-        params = params.append('sort', paramValues.sort[i]);
-      }
+      params = params.append('sort', paramValues.sort[0]);
     }
     params = params.append('search', paramValues.search);
-    return lastValueFrom(this.http.get(`product/page`, { params: params }))
+    params = params.append('userType', paramValues.search);
+    return lastValueFrom(this.http.get(`user/page`, { params: params }))
       .then(res => res)
       .catch(this.handleError);
   }
 
-  createUpdateProduct(product: Product) {
-    return lastValueFrom(this.http.post(`product/`, product))
+  createUpdateUser(user: User) {
+    return lastValueFrom(this.http.post(`user/`, user))
       .then(res => res)
       .catch(this.handleError);
   }
 
-  deleteProductById(productId: number) {
-    return lastValueFrom(this.http.delete(`product/` + productId))
+  deleteUserById(userId: number) {
+    return lastValueFrom(this.http.delete(`user/` + userId))
       .then(res => res)
       .catch(this.handleError);
   }

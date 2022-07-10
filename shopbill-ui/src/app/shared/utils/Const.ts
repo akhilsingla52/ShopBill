@@ -5,11 +5,7 @@ export const APP_IMAGE_URI = APP_URI + 'images/';
 
 export const REST_URI = "rest/"; 
 
-export const ADMIN_URI = REST_URI + "admin/";
-	
-export const OWNER_URI = REST_URI + "owner/";
-
-export const LOGINED_URI = REST_URI + "user/"; 
+export const ADMIN_URI = "admin/";
 
 export const UNIT_TYPE = "unit-type"; 
 

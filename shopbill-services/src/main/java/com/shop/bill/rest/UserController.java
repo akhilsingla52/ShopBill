@@ -1,4 +1,4 @@
-package com.shop.bill.owner.rest;
+package com.shop.bill.rest;
 
 import static com.shop.bill.util.Constants.USER_URI;
 
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.bill.entity.Users;
-import com.shop.bill.owner.service.UserService;
+import com.shop.bill.service.UserService;
 
 @RestController
 @RequestMapping(USER_URI)
@@ -26,13 +26,15 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping("/page")
-	public ResponseEntity<?> getUserPage(@RequestParam String search, @RequestParam String userType, 
+	public ResponseEntity<?> getUserPage(@RequestParam(required=false) String search, 
+										 @RequestParam(required=false) String userType, 
 											@PageableDefault(page = 0, size = 10) Pageable pageable) {
 		return ResponseEntity.ok(userService.getUserPage(search, userType, pageable));
 	}
 	
 	@GetMapping("/list")
-	public ResponseEntity<?> getUserList(@RequestParam String search, @RequestParam String userType) {
+	public ResponseEntity<?> getUserList(@RequestParam(required=false) String search, 
+										 @RequestParam(required=false) String userType) {
 		return ResponseEntity.ok(userService.getUserList(search, userType));
 	}
 	
@@ -49,7 +51,7 @@ public class UserController {
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> deleteUser(@PathVariable Long userId) {
 		userService.deleteUser(userId);
-		return ResponseEntity.ok("User Deleted");
+		return ResponseEntity.ok().build();
 	}
 
 }

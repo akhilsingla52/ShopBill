@@ -1,4 +1,4 @@
-package com.shop.bill.owner.rest;
+package com.shop.bill.rest;
 
 import static com.shop.bill.util.Constants.PRODUCT_URI;
 
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.bill.entity.Product;
-import com.shop.bill.owner.service.ProductService;
+import com.shop.bill.service.ProductService;
 
 @RestController
 @RequestMapping(PRODUCT_URI)
@@ -32,7 +32,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/list")
-	public ResponseEntity<?> getProductList(@RequestParam String search) {
+	public ResponseEntity<?> getProductList(@RequestParam(required=false) String search) {
 		return ResponseEntity.ok(productService.getProductList(search));
 	}
 	

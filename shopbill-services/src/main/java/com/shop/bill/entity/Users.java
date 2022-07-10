@@ -6,6 +6,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +19,7 @@ import lombok.Setter;
 @Setter
 @Entity
 public class Users extends CommonEntity {
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_type")
 	private CommonCode type;
@@ -26,14 +29,15 @@ public class Users extends CommonEntity {
     @Column(columnDefinition = "text")
     private String address;
     @Column(length = 11, unique = true)
-    private Integer mobile;
+    private Long mobile;
     @Column(length = 11)
-    private Integer phone;
+    private Long phone;
     private String gstin;
     private String pan;
     private String state;
     private String stateCode;
-    private String pinCode;
+    @Column(length = 6)
+    private Long pinCode;
     private Double balance;
     private String remark;
 }

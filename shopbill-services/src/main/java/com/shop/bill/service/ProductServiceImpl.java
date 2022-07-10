@@ -1,4 +1,4 @@
-package com.shop.bill.owner.service;
+package com.shop.bill.service;
 
 import java.util.List;
 import java.util.Optional;

@@ -21,8 +21,8 @@
             <tr>
                 <th *ngFor="let head of headElements; let i = index" (click)="orderBy(head.sort)">
                     {{ head.element }}
-                    <em class='fas' *ngIf="params.sort === head.sort || params.sort === (head.sort+',desc')"
-                        [ngClass]="params.sort===head.sort ? 'fa-caret-up' : 'fa-caret-down'"></em>
+                    <em class='fas' *ngIf="params.sort[0].split(',').shift() === head.sort.split(',').shift()"
+                        [ngClass]="params.sort[0]===head.sort ? 'fa-caret-up' : 'fa-caret-down'"></em>
                 </th>
                 <th class="text-center">
                     <em class="fa fa-cog"></em>
@@ -34,26 +34,33 @@
                 <td colspan="8">No Product to Display</td>
             </tr>
 
-            <tr *ngFor="let product of products; let i = index">
-                <td>{{product.code}}</td>
-                <td>{{product.name}}</td>
-                <td>{{product.hsnCode}}</td>
-                <td>{{product.unit}}</td>
-                <td>{{product.unitType.messageEn}}</td>
-                <td>{{product.price}}</td>
-                <td>{{product.crtId}}</td>
-                <td>{{product.crtDtm | date:'dd-MMM-yyyy'}}</td>
-                <td class="text-center p-0" *ngIf="product.delYn === 'N'">
-                    <a class='me-2 btn text-primary edit-button' data-toggle="modal" data-target="#addUpdateModel"
-                        (click)="openUpdateModel(product)">
+            <tr *ngFor="let p of products; let i = index">
+                <td *ngFor="let head of headElements; let i = index" (click)="orderBy(head.sort)">
+                    <span *ngIf="!(head.sort === 'unitType.messageEn,unit')">{{ p[head.sort] }}</span>
+                    <span *ngIf="head.sort === 'unitType.messageEn,unit'">{{p.unit}} {{p.unitType.messageEn}}</span>
+                </td>
+                <td class="text-center p-0" *ngIf="p.delYn === 'N'">
+                    <a class='me-2 btn text-success edit-button' 
+                        data-bs-toggle="modal" data-bs-target="#showModel"
+                        (click)="product=p">
+                        <em class='far fa-eye'></em>
+                    </a>
+                    <a class='me-2 btn text-primary edit-button' 
+                        data-bs-toggle="modal" data-bs-target="#addUpdateModel"
+                        (click)="openUpdateModel(p)">
                         <em class='far fa-edit'></em>
                     </a>
-                    <a class='btn text-danger delete-button' (click)="deleteProductById(product, i)">
+                    <a class='btn text-danger delete-button' (click)="deleteProductById(p)">
                         <em class='far fa-trash-alt'></em>
                     </a>
                 </td>
-                <td class="text-center p-0" *ngIf="product.delYn === 'Y'">
-                    <a class='btn text-success edit-button' (click)="activateProduct(product)">
+                <td class="text-center p-0" *ngIf="p.delYn === 'Y'">
+                    <a class='me-2 btn text-success edit-button' 
+                        data-bs-toggle="modal" data-bs-target="#showModel"
+                        (click)="product=p">
+                        <em class='far fa-eye'></em>
+                    </a>
+                    <a class='btn text-success edit-button' (click)="activateProduct(p)">
                         <em class='fa fa-check'></em>
                     </a>
                 </td>
@@ -68,7 +75,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header alert-info">
-                <h1 class="mx-auto">{{model_header}} Product</h1>
+                <h1 class="mx-auto">{{modelHeader}} Product</h1>
+                <button class="btn-close position-absolute end-0 pe-5" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <form [formGroup]="form" (ngSubmit)="createUpdateProduct()" novalidate>
@@ -152,10 +160,55 @@
 
                     <div class="col-md-12">
                         <button type="submit" class="me-2 btn btn-success"
-                            [disabled]="!form.valid">{{model_header}}</button>
+                            [disabled]="!form.valid">{{modelHeader}}</button>
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Show Model -->
+<div class="modal fade" id="showModel" role="dialog" 
+    data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header alert-success">
+                <h1 class="mx-auto">Product</h1>
+                <button class="btn-close position-absolute end-0 pe-5" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <div class="row py-3">
+                        <div class="col-md-6 fw-bold">Product Code</div>
+                        <div class="col-md-6">{{product?.code}}</div>
+                    </div>
+                    <div class="row py-3">
+                        <div class="col-md-6 fw-bold">Product Name</div>
+                        <div class="col-md-6">{{product?.name}}</div>
+                    </div>
+                    <div class="row py-3">
+                        <div class="col-md-6 fw-bold">HSN Code</div>
+                        <div class="col-md-6">{{product?.hsnCode}}</div>
+                    </div>
+                    <div class="row py-3">
+                        <div class="col-md-6 fw-bold">Stock</div>
+                        <div class="col-md-6">{{product?.unit}} {{product?.unitType?.messageEn}}</div>
+                    </div>
+                    <div class="row py-3">
+                        <div class="col-md-6 fw-bold">Price</div>
+                        <div class="col-md-6">{{product?.price}}</div>
+                    </div>
+                    <div class="row py-3">
+                        <div class="col-md-6 fw-bold">Created By</div>
+                        <div class="col-md-6">{{product?.crtId}}</div>
+                    </div>
+                    <div class="row py-3">
+                        <div class="col-md-6 fw-bold">Created Date</div>
+                        <div class="col-md-6">{{product?.crtDtm | date:'mediumDate'}}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

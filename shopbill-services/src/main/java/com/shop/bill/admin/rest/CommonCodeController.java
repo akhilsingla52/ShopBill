@@ -39,8 +39,8 @@ public class CommonCodeController {
 	
 	@PostMapping
 	public ResponseEntity<?> saveOrUpdateCode(@RequestBody CommonCode commonCode) {
-		commonCodeService.saveOrUpdateCode(commonCode);
-		return ResponseEntity.ok().build();
+		commonCode = commonCodeService.saveOrUpdateCode(commonCode);
+		return ResponseEntity.ok(commonCode);
 	}
 	
 	@DeleteMapping("/{codeKey}")
